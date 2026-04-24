@@ -1,266 +1,798 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Christopher Toa — Software Developer</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Christopher Toa — Software Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cyan: #00d4ff;
+    --cyan-dim: #00a8cc;
+    --cyan-glow: rgba(0,212,255,0.15);
+    --blue-light: #a0c4ff;
+    --bg-deep: #060d12;
+    --bg-card: #0d1a24;
+    --bg-card2: #101e28;
+    --border: rgba(0,212,255,0.2);
+    --border-dim: rgba(0,212,255,0.08);
+    --text: #e8f4f8;
+    --text-dim: #7a9db0;
+    --red: #ff6b6b;
+    --green: #00ff9d;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  /* BACKGROUND GRID */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+  }
+  /* SCANLINE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+  }
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(6,13,18,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+  }
+  .nav-logo span { color: var(--text-dim); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 6rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-inner { max-width: 800px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--cyan);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero-name {
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero-name .first { color: var(--text); }
+  .hero-name .last {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--cyan);
+  }
+  .hero-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    padding: 12px 28px;
+    border-radius: 4px;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--cyan);
+    color: var(--bg-deep);
+    font-weight: 700;
+  }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: var(--cyan-glow); transform: translateY(-2px); }
+
+  /* TERMINAL CARD */
+  .terminal {
+    margin: 3rem auto 0;
+    max-width: 560px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.5s ease both;
+    text-align: left;
+  }
+  .terminal-bar {
+    background: #0d1a24;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+  .terminal-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .terminal-body {
+    padding: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.9;
+  }
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: var(--text); }
+  .t-key { color: var(--cyan); }
+  .t-val { color: var(--blue-light); }
+  .t-comment { color: var(--text-dim); }
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--cyan);
+    vertical-align: middle;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+
+  /* SECTION COMMON */
+  .section-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-dim);
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  @media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; } }
+  .about-text p {
+    color: var(--text-dim);
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .about-text strong { color: var(--cyan); font-weight: 600; }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .stat-card:hover { border-color: var(--cyan); transform: translateY(-3px); }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--cyan);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-group {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .skill-group:hover { border-color: var(--border); }
+  .skill-group-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--cyan);
+    letter-spacing: 0.12em;
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .skill-group-title::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--border-dim);
+  }
+  .skill-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--blue-light);
+    background: rgba(0,212,255,0.04);
+    transition: all 0.2s;
+  }
+  .chip:hover {
+    background: var(--cyan-glow);
+    color: var(--cyan);
+    border-color: var(--cyan);
+  }
+
+  /* PROJECT */
+  .project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--blue-light));
+  }
+  .project-card:hover { border-color: var(--border); transform: translateY(-4px); }
+  .project-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .project-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .project-links { display: flex; gap: 8px; }
+  .project-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--cyan);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .project-link:hover { background: var(--cyan-glow); }
+  .project-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+  .project-desc {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.7;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.08);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+
+  /* LEARNING */
+  .learning-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .learn-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex; gap: 12px; align-items: flex-start;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .learn-card:hover { border-color: var(--cyan); transform: translateY(-2px); }
+  .learn-icon {
+    font-size: 1.3rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .learn-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .learn-desc {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* CONTACT */
+  .contact-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .contact-sub {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+  }
+  .contact-links {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    text-decoration: none;
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .contact-link:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-2px);
+    background: var(--cyan-glow);
+  }
+  .contact-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+
+  /* QUOTE */
+  .quote-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 8px 8px 0;
+    padding: 1.5rem 2rem;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  .quote-card cite {
+    display: block;
+    font-style: normal;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--cyan);
+    margin-top: 0.75rem;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border-dim);
+    padding: 2rem;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+  footer span { color: var(--cyan); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .section-wrap { padding: 4rem 1.25rem; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- Custom cursor -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-trail" id="cursorTrail"></div>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>~/</span>christopher-toa</div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#learning">learning</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
 
-  <!-- Noise overlay -->
-  <div class="noise"></div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      available for opportunities
+    </div>
+    <h1 class="hero-name">
+      <span class="first">Christopher</span><br/>
+      <span class="last">Toa</span>
+    </h1>
+    <p class="hero-role">Software Engineering Student</p>
+    <p class="hero-desc">Building the future one line at a time — from Pelileo, Ecuador 🇪🇨 to the global stage.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View my work</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
 
-  <!-- Background grid -->
-  <div class="grid-bg"></div>
-
-  <!-- ─── HERO ─── -->
-  <section class="hero" id="home">
-    <div class="hero-left">
-      <div class="tag-line reveal">
-        <span class="dot"></span> Available for opportunities
+    <!-- Terminal -->
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-title">christopher@dev:~</span>
       </div>
-      <h1 class="hero-title reveal delay-1">
-        <span class="line">Christopher</span>
-        <span class="line accent">Toa</span>
-      </h1>
-      <p class="hero-sub reveal delay-2">
-        Software Engineering Student @ <strong>UTA</strong><br/>
-        Building the web — one commit at a time.
-      </p>
-      <div class="hero-cta reveal delay-3">
-        <a href="#projects" class="btn btn-primary">View Projects</a>
-        <a href="mailto:christophertoa@gmail.com" class="btn btn-ghost">Contact Me</a>
-      </div>
-      <div class="hero-socials reveal delay-4">
-        <a href="https://github.com/christopher5854" target="_blank" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/christopher-toa-b4323934b" target="_blank" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
+      <div class="terminal-body">
+        <div><span class="t-prompt">➜</span> <span class="t-cmd">cat profile.json</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-key">"name"</span>: <span class="t-val">"Christopher Toa"</span>,</div>
+        <div><span class="t-key">"location"</span>: <span class="t-val">"Pelileo, Ecuador 🇪🇨"</span>,</div>
+        <div><span class="t-key">"university"</span>: <span class="t-val">"UTA — 4th Semester"</span>,</div>
+        <div><span class="t-key">"focus"</span>: <span class="t-val">"Web &amp; Backend Dev"</span>,</div>
+        <div><span class="t-key">"fuel"</span>: <span class="t-val">["coffee", "code", "consistency"]</span>,</div>
+        <div><span class="t-key">"goal"</span>: <span class="t-val">"Launch my own digital product"</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-prompt">➜</span> <span class="t-comment"># System ready. Welcome. 🟢</span></div>
+        <div><span class="t-prompt">➜</span> <div class="cursor"></div></div>
       </div>
     </div>
-    <div class="hero-right reveal delay-2">
-      <div class="terminal">
-        <div class="terminal-bar">
-          <span></span><span></span><span></span>
-          <p>christopher@dev ~ </p>
-        </div>
-        <div class="terminal-body" id="terminal-body">
-          <div class="t-line"><span class="prompt">$</span> <span class="cmd" id="cmd1"></span></div>
-          <div class="t-line" id="output1" style="display:none">
-            <span class="key">name:</span> <span class="val">Christopher Toa</span><br/>
-            <span class="key">role:</span> <span class="val">Software Developer</span><br/>
-            <span class="key">location:</span> <span class="val">Pelileo, Ecuador 🇪🇨</span><br/>
-            <span class="key">semester:</span> <span class="val">4th @ UTA</span>
-          </div>
-          <div class="t-line" id="line2" style="display:none"><span class="prompt">$</span> <span class="cmd" id="cmd2"></span></div>
-          <div class="t-line" id="output2" style="display:none">
-            <span class="key">stack:</span> <span class="val">Java · React · MySQL · PostgreSQL</span><br/>
-            <span class="key">tools:</span> <span class="val">Git · VS Code · IntelliJ</span><br/>
-            <span class="key">learning:</span> <span class="val">Spring Boot · Docker · REST APIs</span>
-          </div>
-          <div class="t-line" id="line3" style="display:none"><span class="prompt">$</span> <span class="blink">_</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ─── ABOUT ─── -->
-  <section class="about section" id="about">
-    <div class="section-label">01 — About</div>
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">01.</span>
+      <h2 class="section-title">About Me</h2>
+      <div class="section-line"></div>
+    </div>
     <div class="about-grid">
       <div class="about-text reveal">
-        <h2>Who I am</h2>
-        <p>I'm a 4th semester Software Engineering student at <em>Universidad Técnica de Ambato</em>, Ecuador. I'm passionate about building clean, functional web applications and constantly leveling up my technical skills.</p>
-        <p>My philosophy? <strong>"The best code is built as a team."</strong> I believe collaboration, communication, and consistency beat raw talent every time.</p>
-        <p>Currently exploring the full stack — from backend Java APIs to modern React frontends — and always looking for my next challenge.</p>
+        <p>Hey! I'm Christopher — a <strong>4th-semester Software Engineering student</strong> at Universidad Técnica de Ambato, passionate about building things that actually matter.</p>
+        <p>I believe the best code is built as a <strong>team</strong>. My superpower? Mixing strong communication with clean, purposeful code. Whether it's a backend API or a full-stack application, I bring both technical skills and a <strong>collaborative mindset</strong> to every project.</p>
+        <p>When I'm not coding, you'll find me gaming, exploring new tech, or fueled by another cup of <strong>coffee</strong> — planning my next build.</p>
       </div>
-      <div class="about-stats reveal delay-1">
+      <div class="about-stats reveal">
         <div class="stat-card">
-          <span class="stat-num" data-target="4">0</span>
-          <span class="stat-label">Semesters</span>
+          <div class="stat-num">4th</div>
+          <div class="stat-label">semester @ UTA</div>
         </div>
         <div class="stat-card">
-          <span class="stat-num" data-target="5">0</span>
-          <span class="stat-label">Technologies</span>
+          <div class="stat-num">2+</div>
+          <div class="stat-label">years coding</div>
         </div>
         <div class="stat-card">
-          <span class="stat-num" data-target="1">0</span>
-          <span class="stat-label">Major Projects</span>
+          <div class="stat-num">1</div>
+          <div class="stat-label">shipped project</div>
         </div>
         <div class="stat-card">
-          <span class="stat-num" data-target="100">0</span>
-          <span class="stat-label">% Committed</span>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">cups of coffee</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ─── STACK ─── -->
-  <section class="stack section" id="stack">
-    <div class="section-label">02 — Stack</div>
-    <h2 class="reveal">Technologies I work with</h2>
-    <div class="stack-grid reveal delay-1">
-      <div class="tech-item" data-tech="Java">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573M19.33 20.504s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033-.856-.373.75-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892M17.116 17.584c4.503-2.34 2.421-4.589.968-4.285-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0-.001.07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.888 4.832-.001 6.836-2.274-2.053-3.943-3.858-2.824-5.54 1.644-2.469 6.197-3.665 5.19-7.626M9.734 23.924c4.322.277 10.959-.153 11.116-2.198 0 0-.302.775-3.572 1.391-3.688.694-8.239.613-10.937.168 0-.001.553.457 3.393.639"/></svg>
-        </div>
-        <span>Java</span>
-      </div>
-      <div class="tech-item" data-tech="JavaScript">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg>
-        </div>
-        <span>JavaScript</span>
-      </div>
-      <div class="tech-item" data-tech="React">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.23 12.004a2.236 2.236 0 01-2.235 2.236 2.236 2.236 0 01-2.236-2.236 2.236 2.236 0 012.235-2.236 2.236 2.236 0 012.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38a2.167 2.167 0 00-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44a23.476 23.476 0 00-3.107-.534A23.892 23.892 0 0012 4.267a23.514 23.514 0 00-1.779 2.354 23.476 23.476 0 00-3.109.535 23.118 23.118 0 01-.248-1.438c-.228-1.869.062-3.32.726-3.704a.6.6 0 01.371-.126c.748 0 1.852.61 3.064 1.729 1.21-1.12 2.315-1.73 3.065-1.73zm-7.063 5.686a23.558 23.558 0 011.37-2.024c.448.048.897.106 1.345.176a23.84 23.84 0 00-.737 1.862 23.998 23.998 0 00-1.978-.014zm5.051 0c-.641.015-1.306.052-1.978.014a23.657 23.657 0 00-.737-1.862c.448-.07.897-.128 1.345-.176a23.585 23.585 0 011.37 2.024zM8 12.004c0-.559.028-1.11.079-1.652.51.064 1.03.115 1.555.148a24.118 24.118 0 000 3.007 23.88 23.88 0 01-1.555.148A20.843 20.843 0 018 12.004zm6.165 1.503a24.118 24.118 0 000-3.007c.525-.033 1.046-.084 1.555-.148.05.541.079 1.093.079 1.652 0 .56-.028 1.11-.079 1.652a23.88 23.88 0 01-1.555-.149zm-3.125.3c.486.016.973.016 1.46 0a22.19 22.19 0 01-.73 1.847 23.44 23.44 0 01-.73-1.846zm-3.9 2.207c-.649.013-1.303.052-1.966.014a23.503 23.503 0 01-1.37-2.024c.437-.065.877-.123 1.317-.175a23.84 23.84 0 00.737 1.862c.43.11.855.215 1.282.323zm7.125 0c.427-.108.852-.213 1.282-.323a23.84 23.84 0 00.737-1.862c.44.052.88.11 1.317.175a23.503 23.503 0 01-1.37 2.024 23.513 23.513 0 01-1.966-.014zM4.953 10.5c.448-.07.897-.128 1.345-.176A23.585 23.585 0 014.928 12.4a23.514 23.514 0 00-1.345-.176 23.657 23.657 0 01.37-1.724zm14.095 0c.124.568.24 1.144.37 1.724a23.657 23.657 0 01-1.345.176 23.514 23.514 0 00-1.37-1.9c.448.048.897.106 1.345.176z"/></svg>
-        </div>
-        <span>React</span>
-      </div>
-      <div class="tech-item" data-tech="MySQL">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.405 5.501c-.115 0-.193.014-.274.033v.013h.014c.054.104.146.19.256.274l.036.097.055-.067c.14-.153.193-.357.193-.575zM8.19 5.598c-.061.037-.086.127-.069.188.083.302.252.572.468.77.07.066.145.134.22.197.077.064.16.126.244.184.099.068.197.133.296.196.139.088.264.172.375.25l.007.007c-.038-.064-.105-.125-.186-.179-.143-.092-.284-.181-.42-.267-.082-.051-.156-.097-.22-.14-.061-.041-.108-.079-.145-.11-.077-.066-.143-.142-.198-.224-.055-.082-.098-.17-.132-.264zM7.457 4.673c-.014.039-.018.08-.016.122.01.116.056.248.12.369.048.091.1.18.152.267.093.155.179.3.244.43l.006.011c-.05-.068-.107-.14-.167-.213C7.7 5.55 7.6 5.435 7.515 5.317c-.085-.118-.15-.24-.192-.366-.02-.06-.032-.12-.032-.178 0-.023.004-.046.009-.07-.016.013-.03.026-.043.04.088.096.173.202.256.316zm3.28 10.204c.1.07.196.14.284.2.205.14.393.25.559.318.172.07.324.1.46.098.138-.003.265-.038.386-.108.121-.07.237-.175.348-.318.27-.347.473-.775.6-1.267.126-.492.184-1.035.17-1.614-.014-.58-.097-1.182-.25-1.782-.152-.6-.38-1.186-.67-1.723a5.05 5.05 0 00-.436-.7 2.64 2.64 0 00-.566-.57 2.063 2.063 0 00-.75-.323 2.388 2.388 0 00-.944-.01c-.305.056-.61.176-.91.362-.143.09-.285.196-.43.32-.105.09-.21.187-.316.29.07.005.136.013.196.025.04.009.08.02.12.033.062.02.126.047.19.082.063.035.125.078.183.13a.754.754 0 01.17.236c.035.08.057.168.065.263.009.096.006.198-.01.307a2.68 2.68 0 01-.118.444 4.23 4.23 0 01-.257.582 5.72 5.72 0 01-.424.7c-.096.132-.202.258-.317.374-.115.117-.24.223-.373.316a2.12 2.12 0 01-.42.222c-.145.054-.29.082-.433.082a1.25 1.25 0 01-.378-.057 1.226 1.226 0 01-.337-.165 1.4 1.4 0 01-.28-.286 1.65 1.65 0 01-.197-.41 2.48 2.48 0 01-.097-.529c-.013-.195-.005-.407.025-.634.028-.227.086-.47.168-.72a6.04 6.04 0 01.384-.87 7.76 7.76 0 01.609-.917c.12-.153.25-.302.387-.444a5.4 5.4 0 01.45-.4c.158-.12.322-.231.49-.326.167-.095.336-.173.503-.231a3.185 3.185 0 01.463-.105c.148-.02.29-.027.424-.023.198.005.387.031.565.078.177.047.345.113.506.198.161.085.314.19.46.314.146.123.285.266.413.428.196.249.368.538.51.856.115.254.21.52.286.797.03.109.057.22.08.332.015-.04.033-.08.052-.12.053-.116.118-.228.194-.336.076-.108.163-.21.261-.303.097-.093.206-.176.324-.247.117-.07.244-.127.38-.169.135-.042.278-.07.428-.083.148-.013.302-.011.458.007.157.018.315.05.473.098.158.047.313.107.463.18.15.073.293.158.428.254a3.854 3.854 0 01.675.626 4.17 4.17 0 01.461.72c.12.256.218.527.293.81.075.283.127.579.155.88.027.302.03.611.008.919a6.61 6.61 0 01-.108.872 5.91 5.91 0 01-.232.812 5.128 5.128 0 01-.4.76c-.165.248-.357.472-.571.666a3.35 3.35 0 01-.74.48 3.29 3.29 0 01-.86.258 3.39 3.39 0 01-.906.01 3.344 3.344 0 01-.858-.214 3.62 3.62 0 01-.768-.426 4.367 4.367 0 01-.665-.617 5.18 5.18 0 01-.54-.793c-.06-.117-.115-.236-.165-.357a8.23 8.23 0 01-.265-.85 9.41 9.41 0 01-.145-.91 9.817 9.817 0 01-.048-.974c.004-.33.025-.66.062-.986.038-.326.09-.647.158-.96.067-.313.149-.619.245-.91.096-.29.206-.57.326-.832.12-.26.25-.504.388-.727.138-.222.283-.426.435-.606.151-.18.31-.34.472-.476.162-.136.327-.247.495-.331.168-.084.337-.142.506-.173.169-.031.336-.035.5-.013.165.022.326.07.482.145.156.075.307.177.452.305.145.128.284.283.416.46.132.177.258.378.375.6.117.222.226.464.325.72.098.257.187.527.264.804.077.277.142.563.195.853.053.29.095.585.126.88.031.295.052.592.063.886.012.294.014.587.007.876-.007.29-.022.577-.047.859-.025.282-.058.558-.1.828z"/></svg>
-        </div>
-        <span>MySQL</span>
-      </div>
-      <div class="tech-item" data-tech="PostgreSQL">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.128 0a10.134 10.134 0 00-2.755.403 7.316 7.316 0 00-1.006-1.016C11.698-1.154 9.447.035 8.074.699 6.168.157 4.59.116 3.635.758 1.423 2.219.058 5.462.008 6.35c-.059 1.046.23 1.885.87 2.498.757.724 1.965.891 2.808.891a4.15 4.15 0 01.35-.857c.018.026.033.052.051.078.18.264.363.52.552.78-.17.382-.256.79-.253 1.207 0 1.464.765 2.517 1.795 3.288.02 1.13-.038 2.173-.15 2.72-.24 1.17-.174 2.016-.125 2.24.12.557.31 1.091.82 1.515.51.424 1.176.577 1.724.577.548 0 1.195-.177 1.704-.7a2.26 2.26 0 001.055-.773c.238-.343.338-.817.349-1.418.017-.972.034-2.06.038-3.167.14-.058.282-.13.423-.214.28.167.567.314.857.445-.128.498-.195 1.013-.198 1.534 0 2.024.738 3.538 1.799 4.44a3.064 3.064 0 002.008.743c.599 0 1.346-.174 1.908-.77 1.133.07 2.135-.234 2.842-.98 1.028-1.086 1.253-2.837.641-5.024a4.84 4.84 0 00.292-1.658 3.43 3.43 0 00-.396-1.627c.084-.27.167-.544.244-.823.37-1.364.487-2.83.347-4.062-.12-1.04-.428-1.845-.94-2.323-.512-.478-1.178-.64-1.832-.64zm.095 1.6c.456 0 .795.116.985.306.19.19.394.545.49 1.38.128 1.096.02 2.494-.334 3.783a12.11 12.11 0 01-.553 1.519c.07.193.131.395.181.607.163.694.23 1.43.23 2.024 0 .26-.018.5-.052.716a3.09 3.09 0 00-.418-.23 2.447 2.447 0 00-.98-.196c-.33 0-.662.062-.985.18a2.34 2.34 0 00-.984.608 3.15 3.15 0 00-1.127.124 5.82 5.82 0 00-.394.152c-.014-.27-.023-.548-.028-.84a2.72 2.72 0 00-.42-.28c-.217-.115-.447-.186-.678-.186a1.41 1.41 0 00-.686.186 1.92 1.92 0 00-.506.42c-.15-.037-.3-.07-.448-.1-.073-.016-.146-.032-.22-.045.014-.22.012-.44-.006-.663-.074-.89-.324-1.688-.83-2.344.358-.636.674-1.326.835-2.092.255-.01.51-.04.766-.088.63-.12 1.255-.336 1.83-.656zm-.01 1.39a5.47 5.47 0 01-1.58.54c-.27.05-.546.08-.82.09.07-.61.195-1.198.38-1.741l.086-.23c.063-.16.126-.33.192-.503.2-.028.398-.065.594-.11.197-.047.39-.103.577-.168l.57 2.123zm-5.456.434a8.85 8.85 0 01-.022.22c-.062.01-.136.021-.211.033-.316-.418-.656-.823-.982-1.222.36-.16.72-.327 1.066-.495.065.482.112.968.15 1.464zm-2.63-1.21c.283.31.576.642.85.96-.43.1-.847.157-1.246.133.124-.4.266-.76.396-1.093zm5.455.977c.272-.033.55-.08.826-.136-.052.26-.09.52-.123.782-.24.015-.48.022-.718.022-.28 0-.558-.008-.834-.025.268-.215.547-.427.849-.643zm-5.694.784c.33-.005.674-.042 1.015-.11.049.37.094.74.141 1.11-.33.057-.667.092-.998.106-.055-.372-.107-.74-.158-1.106zm2.79.32c.38.025.762.028 1.141.01.054.39.104.78.148 1.17-.35.006-.704-.013-1.055-.058-.08-.374-.157-.748-.233-1.122zm2.25-.232c.278.02.552.038.822.054.028.388.052.776.07 1.165-.343.016-.69.023-1.036.02.047-.413.096-.826.144-1.24zm-4.94.944c.293-.013.588-.046.881-.095.06.382.12.763.186 1.143a3.8 3.8 0 01-.925.083c-.05-.377-.098-.754-.142-1.131zm-1.375-.046c.079.39.156.777.234 1.163-.35.018-.697.018-1.035-.002.01-.392.027-.783.048-1.173.25.012.502.013.753.012zm3.59.808a8.35 8.35 0 001.099.045c-.016.372-.034.742-.053 1.11a6.37 6.37 0 01-1.061-.065c.005-.363.01-.726.015-1.09zm-2.17.07c.321.054.643.09.964.098 0 .365-.003.73-.005 1.095-.34-.02-.679-.063-1.01-.134.017-.354.034-.706.051-1.059zm4.404 0c.36-.008.722-.031 1.084-.07-.063.37-.128.74-.193 1.11a5.98 5.98 0 01-1.013.09c.04-.378.081-.753.122-1.13zm-6.644.07c.26-.002.522-.012.785-.029-.015.362-.03.724-.044 1.087a4.4 4.4 0 01-.788-.064c.015-.332.031-.663.047-.994zm1.84-.053c.32.054.643.087.966.097-.022.363-.045.726-.068 1.089a4.24 4.24 0 01-.893-.083c-.001-.368 0-.735-.005-1.103zm-3.703.136c.055.265.11.53.167.793a3.08 3.08 0 01-.82.048c.17-.28.353-.553.653-.84z"/></svg>
-        </div>
-        <span>PostgreSQL</span>
-      </div>
-      <div class="tech-item" data-tech="HTML5">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg>
-        </div>
-        <span>HTML5</span>
-      </div>
-      <div class="tech-item" data-tech="CSS3">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414z"/></svg>
-        </div>
-        <span>CSS3</span>
-      </div>
-      <div class="tech-item" data-tech="Git">
-        <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.658 2.66c.645-.223 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.6-.401-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/></svg>
-        </div>
-        <span>Git</span>
-      </div>
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">02.</span>
+      <h2 class="section-title">Tech Stack</h2>
+      <div class="section-line"></div>
     </div>
-  </section>
-
-  <!-- ─── PROJECTS ─── -->
-  <section class="projects section" id="projects">
-    <div class="section-label">03 — Projects</div>
-    <h2 class="reveal">What I've built</h2>
-    <div class="projects-grid reveal delay-1">
-      <div class="project-card featured">
-        <div class="project-number">001</div>
-        <div class="project-top">
-          <span class="project-badge">Featured</span>
-          <div class="project-links">
-            <a href="https://github.com/christopher5854" target="_blank">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            </a>
-          </div>
-        </div>
-        <h3>Insurance Management System</h3>
-        <p>Full-stack system for managing clients, insurance policies, and claims. Automates manual processes in the insurance sector with administrative reports and a clean interface.</p>
-        <div class="project-tech">
-          <span>Java</span>
-          <span>MySQL</span>
-          <span>HTML</span>
-          <span>CSS</span>
-          <span>JavaScript</span>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <div class="skill-group-title">languages</div>
+        <div class="skill-chips">
+          <span class="chip">Java</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">HTML5</span>
+          <span class="chip">CSS3</span>
         </div>
       </div>
-
-      <div class="project-card coming">
-        <div class="project-number">002</div>
-        <div class="project-top">
-          <span class="project-badge wip">In Progress</span>
-        </div>
-        <h3>REST API with Spring Boot</h3>
-        <p>Building a RESTful API backend as part of exploring the Java Spring Boot ecosystem. Focused on clean architecture and best practices.</p>
-        <div class="project-tech">
-          <span>Java</span>
-          <span>Spring Boot</span>
-          <span>PostgreSQL</span>
+      <div class="skill-group reveal">
+        <div class="skill-group-title">frameworks</div>
+        <div class="skill-chips">
+          <span class="chip">React</span>
+          <span class="chip">Spring Boot</span>
+          <span class="chip">REST APIs</span>
         </div>
       </div>
-
-      <div class="project-card coming">
-        <div class="project-number">003</div>
-        <div class="project-top">
-          <span class="project-badge soon">Coming Soon</span>
+      <div class="skill-group reveal">
+        <div class="skill-group-title">databases</div>
+        <div class="skill-chips">
+          <span class="chip">MySQL</span>
+          <span class="chip">PostgreSQL</span>
+          <span class="chip">SQL</span>
         </div>
-        <h3>React Web App</h3>
-        <p>A modern frontend project applying React best practices, component architecture, and UI/UX principles learned through current studies.</p>
-        <div class="project-tech">
-          <span>React</span>
-          <span>JavaScript</span>
-          <span>CSS</span>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-title">tools</div>
+        <div class="skill-chips">
+          <span class="chip">Git</span>
+          <span class="chip">GitHub</span>
+          <span class="chip">VS Code</span>
+          <span class="chip">IntelliJ</span>
+          <span class="chip">Docker</span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ─── CONTACT ─── -->
-  <section class="contact section" id="contact">
-    <div class="section-label">04 — Contact</div>
-    <div class="contact-inner reveal">
-      <h2>Let's connect</h2>
-      <p>I'm open to opportunities, collaborations, and conversations.<br/>Feel free to reach out through any of these channels.</p>
-      <div class="contact-links">
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">03.</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div>
+          <div class="project-icon">🛡️</div>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/christopher5854" class="project-link" target="_blank">GitHub →</a>
+        </div>
+      </div>
+      <div class="project-title">Insurance Management System</div>
+      <div class="project-desc">
+        Full-stack application for managing and administering insurance policies. Built for real-world use — handles client registration, policy management, claims processing, and administrative reporting. Automates manual processes across the insurance sector.
+      </div>
+      <div class="project-tags">
+        <span class="tag">Java</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Full Stack</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEARNING -->
+<section id="learning">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">04.</span>
+      <h2 class="section-title">Currently Learning</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="learning-grid">
+      <div class="learn-card reveal">
+        <div class="learn-icon">⚛️</div>
+        <div>
+          <div class="learn-title">React Ecosystem</div>
+          <div class="learn-desc">Deepening JS knowledge</div>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">🔗</div>
+        <div>
+          <div class="learn-title">Spring Boot APIs</div>
+          <div class="learn-desc">REST with Java</div>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">🗃️</div>
+        <div>
+          <div class="learn-title">Advanced SQL</div>
+          <div class="learn-desc">Query optimization</div>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">🐳</div>
+        <div>
+          <div class="learn-title">Docker & DevOps</div>
+          <div class="learn-desc">Containers & CI/CD</div>
+        </div>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">🎨</div>
+        <div>
+          <div class="learn-title">UI/UX Design</div>
+          <div class="learn-desc">Best practices</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <div class="quote-card reveal">
+        "It doesn't matter how many times you fail — what matters is how many times you get back up and try again."
+        <cite>— Every line of code is one step closer to my goals. 💻</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">05.</span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-wrap">
+      <p class="contact-sub reveal">I'm always open to new opportunities, collaborations, and interesting projects. Let's build something together.</p>
+      <div class="contact-links reveal">
+        <a href="https://www.linkedin.com/in/christopher-toa-b4323934b" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
         <a href="mailto:christophertoa@gmail.com" class="contact-link">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-          christophertoa@gmail.com
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+          Gmail
         </a>
         <a href="https://github.com/christopher5854" target="_blank" class="contact-link">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          github.com/christopher5854
-        </a>
-        <a href="https://www.linkedin.com/in/christopher-toa-b4323934b" target="_blank" class="contact-link">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          linkedin.com/in/christopher-toa
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
         </a>
       </div>
     </div>
-  </section>
-
-  <!-- ─── NAV ─── -->
-  <nav class="nav" id="nav">
-    <a href="#home" class="nav-logo">CT</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- mobile nav -->
-  <div class="mobile-nav" id="mobileNav">
-    <a href="#about" class="mnav-link">About</a>
-    <a href="#stack" class="mnav-link">Stack</a>
-    <a href="#projects" class="mnav-link">Projects</a>
-    <a href="#contact" class="mnav-link">Contact</a>
   </div>
+</section>
 
-  <script src="main.js"></script>
+<!-- FOOTER -->
+<footer>
+  <p>Designed & built by <span>Christopher Toa</span> · <span>2025</span> · Pelileo, Ecuador 🇪🇨</p>
+  <p style="margin-top: 6px; font-size: 0.65rem; opacity: 0.5;">Built with HTML · CSS · JS — no frameworks, just craft.</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--cyan)' : '';
+    });
+  });
+</script>
 </body>
 </html>
